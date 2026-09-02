@@ -1,0 +1,45 @@
+{
+  "name": "hkd-pos",
+  "productName": "HKD Pizza Point POS",
+  "version": "1.0.0",
+  "description": "Hashmi Ka Dera (HKD) Pizza Point - offline-first desktop POS",
+  "main": "dist-electron/main/index.js",
+  "private": true,
+  "author": "Hashmi Ka Dera",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build && electron-builder",
+    "build:dir": "tsc -p tsconfig.json --noEmit && vite build && electron-builder --dir",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/anton": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/noto-nastaliq-urdu": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.2.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.9",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.20",
+    "electron": "^32.1.2",
+    "electron-builder": "^25.0.5",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8",
+    "vite-plugin-electron": "^0.28.8",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  }
+}

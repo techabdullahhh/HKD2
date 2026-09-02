@@ -1,0 +1,49 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/anton";
+@import "@fontsource/noto-nastaliq-urdu";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-hkd-black text-hkd-cream font-body antialiased;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #52403f #211d1d;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: #211d1d;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #52403f;
+  border-radius: 8px;
+}
+
+.urdu-text {
+  font-family: "Noto Nastaliq Urdu", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+}

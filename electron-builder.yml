@@ -1,0 +1,30 @@
+appId: com.hashmikadera.hkdpos
+productName: HKD Pizza Point POS
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - package.json
+asarUnpack:
+  - "**/*.node"
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: "${productName}-Setup-${version}.${ext}"
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+mac:
+  target:
+    - dmg
+  category: public.app-category.food-and-drink
+linux:
+  target:
+    - AppImage
+npmRebuild: true
