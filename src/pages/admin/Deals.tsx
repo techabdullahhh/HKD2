@@ -82,7 +82,7 @@ export function DealsPage() {
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
         {deals.map((deal) => (
           <div key={deal.id} className="overflow-hidden rounded-xl border border-white/10 bg-hkd-charcoal">
-            <img src={imageForDeal(deal.imagePath)} className="h-20 w-full object-cover" />
+            <img src={imageForDeal(deal.name, deal.imagePath)} className="h-20 w-full object-cover" />
             <div className="p-3">
               <div className="flex items-center justify-between">
                 <h3 className="font-display text-sm text-hkd-yellow">{deal.name}</h3>

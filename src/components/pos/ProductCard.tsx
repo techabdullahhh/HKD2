@@ -10,7 +10,7 @@ export function ProductCard({ product, category }: { product: Product; category:
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-white/10 bg-hkd-charcoal shadow-card">
-      <img src={image} alt={product.name} className="h-20 w-full object-cover" />
+      <img src={image} alt={product.name} className="h-24 w-full object-cover" />
       <div className="flex flex-1 flex-col gap-2 p-2.5">
         <h3 className="font-display text-sm leading-tight tracking-wide text-hkd-cream">{product.name}</h3>
         <div className="mt-auto flex flex-wrap gap-1.5">

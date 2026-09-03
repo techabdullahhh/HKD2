@@ -31,7 +31,7 @@ export function DealCard({ deal, onOpenPicker }: { deal: Deal; onOpenPicker: (de
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-hkd-yellow/30 bg-hkd-charcoal shadow-card">
-      <img src={imageForDeal(deal.imagePath)} alt={deal.name} className="h-20 w-full object-cover" />
+      <img src={imageForDeal(deal.name, deal.imagePath)} alt={deal.name} className="h-24 w-full object-cover" />
       <div className="flex flex-1 flex-col gap-1.5 p-2.5">
         <h3 className="font-display text-sm leading-tight tracking-wide text-hkd-yellow">{deal.name}</h3>
         <p className="text-xs text-hkd-cream/60">{description}</p>
