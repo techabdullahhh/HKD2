@@ -97,7 +97,7 @@ export function PaymentModal({ open, onClose, subtotal, serviceCharge, onConfirm
           disabled={submitting || (method === "cash" && tenderedNum < grandTotal)}
           onClick={confirm}
         >
-          {submitting ? "Processing…" : `Confirm & Print — ${formatPKR(grandTotal)}`}
+          {submitting ? "Processing…" : `Complete Sale — ${formatPKR(grandTotal)}`}
         </Button>
       </div>
     </Modal>

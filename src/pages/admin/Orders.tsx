@@ -4,6 +4,7 @@ import { DataTable } from "@/components/admin/DataTable";
 import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
 import { Modal } from "@/components/common/Modal";
+import { ReceiptPreviewModal } from "@/components/pos/ReceiptPreviewModal";
 import { formatDateTime, formatPKR, todayISODate } from "@/lib/format";
 
 export function OrdersPage() {
@@ -13,6 +14,7 @@ export function OrdersPage() {
   const [detail, setDetail] = useState<Order | null>(null);
   const [cancelling, setCancelling] = useState<Order | null>(null);
   const [reason, setReason] = useState("");
+  const [reprintOrderId, setReprintOrderId] = useState<number | null>(null);
 
   async function load() {
     const rows = await window.hkd.orders.list({ businessDateFrom: from, businessDateTo: to });
@@ -32,9 +34,6 @@ export function OrdersPage() {
     load();
   }
 
-  async function reprint(order: Order) {
-    await window.hkd.printer.print(order.id, true);
-  }
 
   return (
     <div className="flex h-full flex-col p-4">
@@ -69,7 +68,7 @@ export function OrdersPage() {
                   View
                 </Button>
                 {o.status === "completed" && (
-                  <Button size="md" variant="secondary" onClick={() => reprint(o)}>
+                  <Button size="md" variant="secondary" onClick={() => setReprintOrderId(o.id)}>
                     Reprint
                   </Button>
                 )}
@@ -142,6 +141,8 @@ export function OrdersPage() {
           rows={3}
         />
       </Modal>
+
+      <ReceiptPreviewModal orderId={reprintOrderId} onClose={() => setReprintOrderId(null)} />
     </div>
   );
 }

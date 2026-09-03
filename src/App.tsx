@@ -19,9 +19,11 @@ import { GeneralSettingsPage } from "@/pages/admin/GeneralSettings";
 import { AuditLogsPage } from "@/pages/admin/AuditLogs";
 import { BackupPage } from "@/pages/admin/Backup";
 import { InvoicePrintPage } from "@/pages/print/InvoicePrint";
+import { TestReceiptPrintPage } from "@/pages/print/TestReceiptPrint";
 
 const params = new URLSearchParams(window.location.search);
-const isPrintMode = params.get("print") === "invoice";
+const printMode = params.get("print");
+const isPrintMode = printMode === "invoice" || printMode === "test";
 
 function HomeRedirect() {
   const user = useAuthStore((s) => s.user);
@@ -37,6 +39,7 @@ export default function App() {
   }, [init]);
 
   if (isPrintMode) {
+    if (printMode === "test") return <TestReceiptPrintPage />;
     const orderId = Number(params.get("orderId"));
     return <InvoicePrintPage orderId={orderId} />;
   }

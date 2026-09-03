@@ -139,6 +139,7 @@ export interface HkdApi {
   printer: {
     list(): Promise<PrinterInfoDTO[]>;
     print(orderId: number, silent: boolean): Promise<void>;
+    testPrint(): Promise<void>;
   };
   audit: {
     list(filter?: { from?: string; to?: string; limit?: number }): Promise<AuditLogEntry[]>;

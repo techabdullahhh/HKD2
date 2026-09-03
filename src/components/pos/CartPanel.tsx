@@ -3,6 +3,7 @@ import { useCartStore } from "@/store/cartStore";
 import { CartLineRow } from "./CartLineRow";
 import { PaymentModal } from "./PaymentModal";
 import { HeldOrdersModal } from "./HeldOrdersModal";
+import { ReceiptPreviewModal } from "./ReceiptPreviewModal";
 import { Button } from "@/components/common/Button";
 import { formatPKR } from "@/lib/format";
 import type { PaymentMethod } from "@shared/types";
@@ -11,6 +12,7 @@ export function CartPanel({ serviceCharge }: { serviceCharge: number }) {
   const { lines, subtotal, clear, toOrderItems, resumingOrderId } = useCartStore();
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [heldOpen, setHeldOpen] = useState(false);
+  const [receiptOrderId, setReceiptOrderId] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [lastError, setLastError] = useState<string | null>(null);
 
@@ -38,11 +40,9 @@ export function CartPanel({ serviceCharge }: { serviceCharge: number }) {
         : await window.hkd.orders.checkout({ items: toOrderItems(), paymentMethod: method, amountTendered });
       clear();
       setPaymentOpen(false);
-      try {
-        await window.hkd.printer.print(order.id, true);
-      } catch {
-        // printer may not be configured yet; not fatal to the sale
-      }
+      // Show the receipt on screen — employee reviews it, then prints from
+      // the preview, rather than it firing straight at the printer unseen.
+      setReceiptOrderId(order.id);
     } catch (err) {
       setLastError(err instanceof Error ? err.message : "Checkout failed");
       throw err;
@@ -102,6 +102,7 @@ export function CartPanel({ serviceCharge }: { serviceCharge: number }) {
         onConfirm={handleConfirmPayment}
       />
       <HeldOrdersModal open={heldOpen} onClose={() => setHeldOpen(false)} />
+      <ReceiptPreviewModal orderId={receiptOrderId} onClose={() => setReceiptOrderId(null)} />
     </div>
   );
 }

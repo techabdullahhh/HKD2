@@ -75,7 +75,8 @@ const api: HkdApi = {
   },
   printer: {
     list: () => ipcRenderer.invoke(CH.printerList),
-    print: (orderId, silent) => ipcRenderer.invoke(CH.printerPrint, orderId, silent)
+    print: (orderId, silent) => ipcRenderer.invoke(CH.printerPrint, orderId, silent),
+    testPrint: () => ipcRenderer.invoke(CH.printerTestPrint)
   },
   audit: {
     list: (filter) => ipcRenderer.invoke(CH.auditList, filter)

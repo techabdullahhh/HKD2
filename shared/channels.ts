@@ -61,6 +61,7 @@ export const CH = {
 
   printerList: "printer:list",
   printerPrint: "printer:print",
+  printerTestPrint: "printer:testPrint",
   printReady: "print:ready",
 
   auditList: "audit:list",

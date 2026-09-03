@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import type Database from "better-sqlite3";
 import { CH } from "../../../shared/channels";
-import { listPrinters, printInvoice } from "../services/printing";
+import { listPrinters, printInvoice, printTestReceipt } from "../services/printing";
 import { getSettings } from "../services/settings";
 import { getOrderById } from "../services/orders";
 import { logAudit } from "../services/audit";
@@ -34,5 +34,19 @@ export function registerPrinterIpc(db: Database.Database): void {
       silent: silent && !!settings.printerName
     });
     logAudit(db, { userId: user.id, action: "invoice_printed", entityType: "order", entityId: orderId });
+  });
+
+  ipcMain.handle(CH.printerTestPrint, async () => {
+    const admin = requireAdmin();
+    const settings = getSettings(db);
+    if (!settings.printerName) {
+      throw new Error("Select a printer below first, then test it.");
+    }
+    await printTestReceipt({
+      printerName: settings.printerName,
+      paperWidthMm: settings.printerPaperWidthMm,
+      silent: true
+    });
+    logAudit(db, { userId: admin.id, action: "printer_test_print", entityType: "settings" });
   });
 }

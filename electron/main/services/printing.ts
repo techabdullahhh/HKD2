@@ -18,12 +18,14 @@ const PAPER_WIDTH_MICRONS: Record<58 | 80, number> = {
   80: 80000
 };
 
-export function printInvoice(params: {
-  orderId: number;
+interface SendToPrinterParams {
+  query: string;
   printerName: string | null;
   paperWidthMm: 58 | 80;
   silent: boolean;
-}): Promise<void> {
+}
+
+function sendToPrinter(params: SendToPrinterParams): Promise<void> {
   return new Promise((resolve, reject) => {
     const printWin = new BrowserWindow({
       show: false,
@@ -34,11 +36,10 @@ export function printInvoice(params: {
       }
     });
 
-    const query = `print=invoice&orderId=${params.orderId}`;
     if (VITE_DEV_SERVER_URL) {
-      printWin.loadURL(`${VITE_DEV_SERVER_URL}?${query}`);
+      printWin.loadURL(`${VITE_DEV_SERVER_URL}?${params.query}`);
     } else {
-      printWin.loadFile(path.join(RENDERER_DIST, "index.html"), { search: query });
+      printWin.loadFile(path.join(RENDERER_DIST, "index.html"), { search: params.query });
     }
 
     const cleanup = () => {
@@ -72,4 +73,20 @@ export function printInvoice(params: {
 
     ipcMain.on(CH.printReady, onReady);
   });
+}
+
+export function printInvoice(params: {
+  orderId: number;
+  printerName: string | null;
+  paperWidthMm: 58 | 80;
+  silent: boolean;
+}): Promise<void> {
+  return sendToPrinter({ ...params, query: `print=invoice&orderId=${params.orderId}` });
+}
+
+// Prints a static sample receipt — no real order/sale involved — so Admin can
+// verify a newly connected thermal printer (alignment, paper width, cut,
+// cash-drawer kick if wired) without ringing up a fake sale first.
+export function printTestReceipt(params: { printerName: string | null; paperWidthMm: 58 | 80; silent: boolean }): Promise<void> {
+  return sendToPrinter({ ...params, query: "print=test" });
 }

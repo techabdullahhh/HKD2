@@ -4,6 +4,7 @@ import { DataTable } from "@/components/admin/DataTable";
 import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
 import { Modal } from "@/components/common/Modal";
+import { ReceiptPreviewModal } from "@/components/pos/ReceiptPreviewModal";
 import { formatDateTime, formatPKR, todayISODate } from "@/lib/format";
 
 export function MySalesPage() {
@@ -12,7 +13,7 @@ export function MySalesPage() {
   const [from, setFrom] = useState(todayISODate());
   const [to, setTo] = useState(todayISODate());
   const [detail, setDetail] = useState<Order | null>(null);
-  const [printing, setPrinting] = useState<number | null>(null);
+  const [reprintOrderId, setReprintOrderId] = useState<number | null>(null);
 
   async function load() {
     const rows = await window.hkd.myOrders.list({ search: search || undefined, from, to });
@@ -23,15 +24,6 @@ export function MySalesPage() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, to]);
-
-  async function reprint(order: Order) {
-    setPrinting(order.id);
-    try {
-      await window.hkd.printer.print(order.id, true);
-    } finally {
-      setPrinting(null);
-    }
-  }
 
   return (
     <div className="flex h-full flex-col p-4">
@@ -82,8 +74,8 @@ export function MySalesPage() {
                   View
                 </Button>
                 {o.status === "completed" && (
-                  <Button size="md" variant="secondary" disabled={printing === o.id} onClick={() => reprint(o)}>
-                    {printing === o.id ? "Printing…" : "Reprint"}
+                  <Button size="md" variant="secondary" onClick={() => setReprintOrderId(o.id)}>
+                    Reprint
                   </Button>
                 )}
               </div>
@@ -127,6 +119,8 @@ export function MySalesPage() {
           </div>
         )}
       </Modal>
+
+      <ReceiptPreviewModal orderId={reprintOrderId} onClose={() => setReprintOrderId(null)} />
     </div>
   );
 }

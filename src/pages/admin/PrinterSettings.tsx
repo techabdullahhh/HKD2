@@ -3,11 +3,15 @@ import type { PrinterInfoDTO } from "@shared/api";
 import type { Settings } from "@shared/types";
 import { Button } from "@/components/common/Button";
 import { Badge } from "@/components/common/Badge";
+import { Modal } from "@/components/common/Modal";
+import { TestReceiptView } from "@/components/print/TestReceiptView";
 
 export function PrinterSettingsPage() {
   const [printers, setPrinters] = useState<PrinterInfoDTO[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const [printing, setPrinting] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   async function load() {
     const [p, s] = await Promise.all([window.hkd.printer.list(), window.hkd.settings.get()]);
@@ -30,7 +34,16 @@ export function PrinterSettingsPage() {
   }
 
   async function testPrint() {
-    setStatus("Printing test page not available without a completed invoice — print any invoice from Orders to verify.");
+    setStatus(null);
+    setPrinting(true);
+    try {
+      await window.hkd.printer.testPrint();
+      setStatus("Test receipt sent to the printer. Check that it printed clearly, at the right width, and cut cleanly.");
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : "Test print failed.");
+    } finally {
+      setPrinting(false);
+    }
   }
 
   return (
@@ -80,10 +93,37 @@ export function PrinterSettingsPage() {
         ))}
       </div>
 
-      <Button className="mt-6" onClick={testPrint} variant="secondary">
-        How do I test this?
-      </Button>
-      {status && <p className="mt-3 text-hkd-cream/60">{status}</p>}
+      <div className="mt-6 rounded-xl border border-white/10 bg-hkd-charcoal p-4">
+        <h2 className="mb-1 font-display text-xl text-hkd-yellow">Test the Connected Printer</h2>
+        <p className="mb-3 max-w-2xl text-sm text-hkd-cream/50">
+          Preview a sample receipt on screen, then send it to the printer — no sale is recorded — so you can confirm the wired
+          thermal printer is set up correctly (alignment, {settings?.printerPaperWidthMm ?? 80}mm width, clean cut) before using
+          it for real invoices.
+        </p>
+        <Button onClick={() => setPreviewOpen(true)} disabled={!settings?.printerName} variant="primary">
+          Preview Test Receipt
+        </Button>
+        {!settings?.printerName && <p className="mt-2 text-sm text-hkd-cream/40">Select a printer above first.</p>}
+        {status && <p className="mt-3 text-sm text-hkd-cream/70">{status}</p>}
+      </div>
+
+      <Modal
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+        title="Test Receipt Preview"
+        footer={
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" onClick={() => setPreviewOpen(false)}>
+              Close
+            </Button>
+            <Button variant="primary" disabled={printing} onClick={testPrint}>
+              {printing ? "Printing…" : "Send to Printer"}
+            </Button>
+          </div>
+        }
+      >
+        <div className="flex justify-center rounded-xl bg-black/30 p-4">{settings && <TestReceiptView settings={settings} />}</div>
+      </Modal>
     </div>
   );
 }
