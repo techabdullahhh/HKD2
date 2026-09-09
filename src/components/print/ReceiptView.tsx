@@ -33,11 +33,11 @@ export function ReceiptView({ order, settings }: { order: Order; settings: Setti
             <span>{formatPKR(item.lineTotal)}</span>
           </div>
           {item.dealChoicesSnapshot?.map((c, idx) => (
-            <div key={idx} className="pl-3 text-[11px] text-black/70">
+            <div key={idx} className="pl-3 text-[11px] text-black">
               - {c.label}: {c.productName} {c.variantName ? `(${c.variantName})` : ""}
             </div>
           ))}
-          {item.notes && <div className="pl-3 text-[11px] italic text-black/70">Note: {item.notes}</div>}
+          {item.notes && <div className="pl-3 text-[11px] italic text-black">Note: {item.notes}</div>}
         </div>
       ))}
       <div className="my-2 border-t border-dashed border-black" />
