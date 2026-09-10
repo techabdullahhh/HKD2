@@ -1,5 +1,6 @@
 import type { Settings } from "@shared/types";
 import { formatPKR } from "@/lib/format";
+import logo from "@/assets/images/logo-receipt.png";
 
 const SAMPLE_ITEMS = [
   { qty: 1, name: "Crown Crust", variant: "Large", price: 1200 },
@@ -25,6 +26,7 @@ export function TestReceiptView({ settings }: { settings: Settings }) {
       </div>
       <div className="my-2 border-t border-dashed border-black" />
       <div className="text-center">
+        <img src={logo} alt="" className="mx-auto mb-1 w-[62%]" />
         <div className="text-base font-bold">{settings.restaurantNameEn}</div>
         <div dir="rtl" className="urdu-text text-base leading-normal">
           {settings.restaurantNameUr}

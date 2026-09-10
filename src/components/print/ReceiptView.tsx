@@ -1,5 +1,6 @@
 import type { Order, Settings } from "@shared/types";
 import { formatDateTime, formatPKR } from "@/lib/format";
+import logo from "@/assets/images/logo-receipt.png";
 
 /**
  * Pure presentational receipt layout — used both by the hidden print window
@@ -11,6 +12,7 @@ export function ReceiptView({ order, settings }: { order: Order; settings: Setti
   return (
     <div className="mx-auto w-[280px] bg-white p-2 font-mono text-[12px] leading-tight text-black">
       <div className="text-center">
+        <img src={logo} alt="" className="mx-auto mb-1 w-[62%]" />
         <div className="text-base font-bold">{settings.restaurantNameEn}</div>
         <div dir="rtl" className="urdu-text text-base leading-normal">
           {settings.restaurantNameUr}
